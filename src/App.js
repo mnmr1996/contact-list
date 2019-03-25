@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-import { Button } from "react-bootstrap";
+import { Button, Alert } from "react-bootstrap";
 
 const Contacts = props => {
   return (
@@ -12,7 +12,20 @@ const Contacts = props => {
       <br />
       {props.Telephone}
       <br />
+      <Button type="button" variant="danger" onClick={props.click}>
+        Delete Contact
+      </Button>
+      <Alert variant="danger" show={props.visibility}>
+        Are you sure you want to Delete{" "}
+        <Button variant="danger" onClick={props.clickYes}>
+          Yes
+        </Button>{" "}
+        <Button variant="btn btn-primary" onClick={props.clickNo}>
+          No
+        </Button>
+      </Alert>
       <hr />
+      <br />
     </div>
   );
 };
@@ -24,7 +37,8 @@ class App extends Component {
         FirstName: "Cathy",
         LastName: "Pierce",
         Birthday: "9/14/1996",
-        Telephone: "200-910-8132"
+        Telephone: "200-910-8132",
+        visibility: false
       },
       {
         FirstName: "Alfonso",
@@ -37,25 +51,29 @@ class App extends Component {
         FirstName: "Victor",
         LastName: "Gordon",
         Birthday: "8/3/1970",
-        Telephone: "200-661-9407"
+        Telephone: "200-661-9407",
+        visibility: false
       },
       {
         FirstName: "Colleen",
         LastName: "Wright",
         Birthday: "10/28/1967",
-        Telephone: "200-250-7949"
+        Telephone: "200-250-7949",
+        visibility: false
       },
       {
         FirstName: "James",
         LastName: "Johnston",
         Birthday: "5/11/1972",
-        Telephone: "200-645-3176"
+        Telephone: "200-645-3176",
+        visibility: false
       },
       {
         FirstName: "Anna",
         LastName: "Reyes",
         Birthday: "9/10/1975",
-        Telephone: "200-707-8670"
+        Telephone: "200-707-8670",
+        visibility: false
       }
     ],
     serch: "",
@@ -71,7 +89,8 @@ class App extends Component {
       FirstName: this.state.newfname,
       LastName: this.state.newlname,
       Birthday: this.state.newBirth,
-      Telephone: this.state.newTel
+      Telephone: this.state.newTel,
+      visibility: false
     };
 
     let adder = [...this.state.contactlist, n];
@@ -86,6 +105,38 @@ class App extends Component {
   delNameHandler = contactIndex => {
     const updateContact = [...this.state.contactlist];
     updateContact.splice(contactIndex, 1);
+    this.setState({
+      contactlist: updateContact
+    });
+  };
+
+  cancelNameHandler = contactIndex => {
+    const updateContact = [...this.state.contactlist];
+    const updateContact2 = this.state.contactlist[contactIndex];
+    const n = {
+      FirstName: updateContact2.FirstName,
+      LastName: updateContact2.LastName,
+      Birthday: updateContact2.Birthday,
+      Telephone: updateContact2.Telephone,
+      visibility: false
+    };
+    updateContact.splice(contactIndex, 1, n);
+    this.setState({
+      contactlist: updateContact
+    });
+  };
+
+  warnNameHandler = contactIndex => {
+    const updateContact = [...this.state.contactlist];
+    const updateContact2 = this.state.contactlist[contactIndex];
+    const n = {
+      FirstName: updateContact2.FirstName,
+      LastName: updateContact2.LastName,
+      Birthday: updateContact2.Birthday,
+      Telephone: updateContact2.Telephone,
+      visibility: true
+    };
+    updateContact.splice(contactIndex, 1, n);
     this.setState({
       contactlist: updateContact
     });
@@ -113,12 +164,15 @@ class App extends Component {
         {filterer.map((cont, index) => {
           return (
             <Contacts
-              click={this.delNameHandler.bind(this, index)}
+              click={this.warnNameHandler.bind(this, index)}
+              clickYes={this.delNameHandler.bind(this, index)}
+              clickNo={this.cancelNameHandler.bind(this, index)}
               FirstName={cont.FirstName}
               LastName={cont.LastName}
               Birthday={cont.Birthday}
               Telephone={cont.Telephone}
               key={cont.Telephone}
+              visibility={cont.visibility}
             />
           );
         })}
