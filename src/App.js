@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
+import { Button } from "react-bootstrap";
 
 const Contacts = props => {
   return (
@@ -56,7 +57,8 @@ class App extends Component {
         Birthday: "9/10/1975",
         Telephone: "200-707-8670"
       }
-    ]
+    ],
+    serch: ""
   };
 
   delNameHandler = contactIndex => {
@@ -68,11 +70,25 @@ class App extends Component {
   };
 
   render() {
+    let filterer = this.state.contactlist.filter(contact => {
+      return (
+        contact.FirstName.toLocaleLowerCase().indexOf(
+          this.state.serch.toLocaleLowerCase()
+        ) !== -1
+      );
+    });
     return (
       <div className="App">
         <h1>Contacts</h1>
+        <input
+          type="text"
+          placeholder="search"
+          onChange={e => {
+            this.setState({ serch: e.target.value });
+          }}
+        />
 
-        {this.state.contactlist.map((cont, index) => {
+        {filterer.map((cont, index) => {
           return (
             <Contacts
               click={this.delNameHandler.bind(this, index)}
