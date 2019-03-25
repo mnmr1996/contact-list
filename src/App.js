@@ -58,7 +58,29 @@ class App extends Component {
         Telephone: "200-707-8670"
       }
     ],
-    serch: ""
+    serch: "",
+    newBirth: "",
+    newTel: "",
+    newfname: "",
+    newlname: ""
+  };
+
+  addNameHandler = () => {
+    console.log(this.state.newfname);
+    const n = {
+      FirstName: this.state.newfname,
+      LastName: this.state.newlname,
+      Birthday: this.state.newBirth,
+      Telephone: this.state.newTel
+    };
+
+    let adder = [...this.state.contactlist, n];
+
+    this.setState({ contactlist: adder });
+    this.setState({ newfname: "" });
+    this.setState({ newlname: "" });
+    this.setState({ newTel: "" });
+    this.setState({ newBirth: "" });
   };
 
   delNameHandler = contactIndex => {
@@ -100,6 +122,64 @@ class App extends Component {
             />
           );
         })}
+        <div>
+          <form>
+            <Button
+              type="button"
+              variant="success"
+              onClick={this.addNameHandler}
+            >
+              add Contact
+            </Button>
+            <br />
+            <input
+              type="text"
+              placeholder="First Name"
+              value={this.state.newfname}
+              onChange={e => {
+                this.setState({
+                  newfname: e.target.value
+                });
+              }}
+              required
+            />
+            <br />
+            <input
+              type="text"
+              placeholder="Last Name"
+              value={this.state.newlname}
+              onChange={e => {
+                this.setState({
+                  newlname: e.target.value
+                });
+              }}
+            />
+            <br />
+            <input
+              type="text"
+              placeholder="Birthday"
+              value={this.state.newBirth}
+              onChange={e => {
+                this.setState({
+                  newBirth: e.target.value
+                });
+              }}
+            />
+            <br />
+            <input
+              type="text"
+              value={this.state.newTel}
+              placeholder="Telehone"
+              required
+              onChange={e => {
+                this.setState({
+                  newTel: e.target.value
+                });
+              }}
+            />
+            <br />
+          </form>
+        </div>
       </div>
     );
   }
