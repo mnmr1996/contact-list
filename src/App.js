@@ -1,6 +1,21 @@
 import React, { Component } from "react";
 import "./App.css";
 
+const Contacts = props => {
+  return (
+    <div>
+      <div id="fullname">
+        {props.FirstName} {props.LastName}
+      </div>
+      {props.Birthday}
+      <br />
+      {props.Telephone}
+      <br />
+      <hr />
+    </div>
+  );
+};
+
 class App extends Component {
   state = {
     contactlist: [
@@ -43,8 +58,34 @@ class App extends Component {
       }
     ]
   };
+
+  delNameHandler = contactIndex => {
+    const updateContact = [...this.state.contactlist];
+    updateContact.splice(contactIndex, 1);
+    this.setState({
+      contactlist: updateContact
+    });
+  };
+
   render() {
-    return <div className="App" />;
+    return (
+      <div className="App">
+        <h1>Contacts</h1>
+
+        {this.state.contactlist.map((cont, index) => {
+          return (
+            <Contacts
+              click={this.delNameHandler.bind(this, index)}
+              FirstName={cont.FirstName}
+              LastName={cont.LastName}
+              Birthday={cont.Birthday}
+              Telephone={cont.Telephone}
+              key={cont.Telephone}
+            />
+          );
+        })}
+      </div>
+    );
   }
 }
 
